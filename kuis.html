@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Interaktif | Nihongo Journey</title>
+    <style>
+        :root { 
+            --main: #bc002d; 
+            --dark: #1a1a1a; 
+            --easy: #2ecc71; 
+            --med: #f1c40f; 
+            --hard: #e74c3c; 
+            --white: #ffffff; 
+            --body-bg: #f4f7f6; /* Warna dasar fallback */
+        }
+        
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            /* Menambahkan Background Gunung Fuji */
+            background-image: linear-gradient(rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.85)), 
+                              url('https://images.unsplash.com/photo-1578271887552-5ac3a72752bc?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Membuat background tetap saat di-scroll */
+            color: var(--dark); 
+            min-height: 100vh;
+        }
+        
+        /* Navbar */
+        nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 15px 8%; 
+            background: rgba(255, 255, 255, 0.95); /* Sedikit transparan */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav ul { list-style: none; display: flex; padding: 0; margin: 0; }
+        nav ul li { margin-left: 30px; }
+        nav ul li a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 0.95rem; transition: 0.3s; }
+        nav ul li a:hover, .active { color: var(--main); }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--main); letter-spacing: 1px; }
+
+        .container { padding: 40px 8% 80px; text-align: center; }
+        
+        h1 { font-size: 2.5rem; margin-bottom: 10px; color: var(--dark); text-shadow: 1px 1px 2px rgba(255,255,255,0.8); }
+        .subtitle { font-size: 1.1rem; color: #555; margin-bottom: 40px; text-shadow: 1px 1px 1px rgba(255,255,255,0.8); }
+
+        /* Level Selection */
+        .level-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; margin-top: 30px; }
+        .level-card { 
+            width: 220px; 
+            padding: 35px 25px; 
+            border-radius: 20px; 
+            color: white; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        .level-card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); filter: brightness(1.05); }
+        .level-card h3 { margin-top: 0; font-size: 1.6rem; margin-bottom: 10px; }
+        .level-card p { margin-bottom: 0; opacity: 0.9; font-size: 0.95rem; }
+        
+        /* Overlay hiasan di kartu */
+        .level-card::after {
+            content: ''; position: absolute; bottom: -20px; right: -20px; width: 80px; height: 80px; 
+            background: rgba(255,255,255,0.1); border-radius: 50%;
+        }
+
+        .easy { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .med { background: linear-gradient(135deg, #f1c40f, #f39c12); }
+        .hard { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+
+        /* Quiz Box */
+        #quiz-box { 
+            display: none; 
+            max-width: 650px; 
+            margin: 30px auto; 
+            background: rgba(255, 255, 255, 0.95); /* Sangat sedikit transparan */
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12); 
+            text-align: left; 
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        #progress { font-weight: 600; font-size: 0.9rem; }
+        .question { font-size: 1.4rem; font-weight: 700; margin-bottom: 25px; color: var(--dark); line-height: 1.4; }
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .option-btn { 
+            padding: 18px 20px; 
+            border: 2px solid #e0e0e0; 
+            border-radius: 12px; 
+            background: white; 
+            cursor: pointer; 
+            text-align: left; 
+            transition: all 0.2s ease; 
+            font-size: 1rem; 
+            font-weight: 500;
+            color: var(--dark);
+        }
+        .option-btn:hover { border-color: var(--main); background-color: #fff5f6; transform: translateX(5px); }
+        
+        /* Result Screen Style Update */
+        .score-circle { 
+            width: 160px; height: 160px; 
+            border: 10px solid var(--main); 
+            border-radius: 50%; 
+            margin: 30px auto; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            background: white;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
+        }
+
+        .hidden { display: none !important; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav { padding: 15px 5%; }
+            nav ul li { margin-left: 15px; }
+            .container { padding: 30px 5%; }
+            h1 { font-size: 2rem; }
+            .level-card { width: 100%; max-width: 300px; }
+            #quiz-box { padding: 30px 20px; }
+            .question { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">NIHONGO.</div>
+        <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="materi.html">Materi</a></li>
+            <li><a href="kuis.html" class="active">Kuis</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div id="selection-screen">
+            <h1>Uji Kemampuanmu</h1>
+            <p class="subtitle">Pilih level kuis di bawah ini (Masing-masing 10 soal)</p>
+            
+            <div class="level-container">
+                <div class="level-card easy" onclick="startQuiz('mudah')">
+                    <h3>Mudah</h3>
+                    <p>Hiragana dasar & Sapaan sehari-hari</p>
+                </div>
+                <div class="level-card med" onclick="startQuiz('sedang')">
+                    <h3>Sedang</h3>
+                    <p>Kosakata umum, Angka & Partikel dasar</p>
+                </div>
+                <div class="level-card hard" onclick="startQuiz('sulit')">
+                    <h3>Sulit</h3>
+                    <p>Kanji dasar, Tata bahasa & Perubahan kata</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Area -->
+        <div id="quiz-box">
+            <div id="quiz-content">
+                <p id="progress" style="color: #bc002d; margin-bottom: 8px;"></p>
+                <div class="question" id="question-text">Pertanyaan akan muncul di sini?</div>
+                <div class="options-grid" id="options-container">
+                    <!-- Tombol pilihan akan muncul di sini via JS -->
+                </div>
+            </div>
+            
+            <!-- Result Screen (Hidden initially) -->
+            <div id="result-screen" class="hidden" style="text-align: center; padding: 10px 0;">
+                <h2 style="color: var(--dark); margin-bottom: 5px; font-size: 2rem;">Kuis Selesai!</h2>
+                <p style="color: #666; margin-top: 0;">Hasil penilaian kamu adalah:</p>
+                
+                <!-- Lingkaran Skor -->
+                <div class="score-circle">
+                    <span id="final-score" style="font-size: 3.5rem; font-weight: 800; color: var(--main); line-height: 1;">0</span>
+                    <span style="font-size: 1.1rem; color: #888; border-top: 1px solid #eee; padding-top: 5px; margin-top: 5px; width: 70%;">dari 10</span>
+                </div>
+
+                <h3 id="score-status" style="margin-bottom: 8px; font-size: 1.4rem;">Bagus!</h3>
+                <p id="score-comment" style="color: #666; font-style: italic; margin-bottom: 35px; max-width: 400px; margin-left: auto; margin-right: auto; line-height: 1.5;"></p>
+                
+                <button onclick="location.reload()" style="background: var(--dark); color: white; border: none; padding: 15px 30px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 1rem; width: auto; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                    Coba Lagi / Pilih Level Lain
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Kuis (Sama seperti sebelumnya)
+        const quizData = {
+            mudah: [
+                { q: "Apa bunyi karakter Hiragana 'あ'?", a: ["a", "i", "u", "e"], c: 0 },
+                { q: "Bagaimana cara mengucapkan 'Selamat Pagi' (formal) dalam bahasa Jepang?", a: ["Konnichiwa", "Ohayou Gozaimasu", "Konbanwa", "Sayonara"], c: 1 },
+                { q: "Karakter Hiragana untuk 'ku' adalah...", a: ["き", "け", "く", "こ"], c: 2 },
+                { q: "Apa arti dari 'Arigatou'?", a: ["Maaf", "Permisi", "Tolong", "Terima Kasih"], c: 3 },
+                { q: "Bunyi dari 'す' adalah...", a: ["Su", "Shi", "Sa", "Se"], c: 0 },
+                { q: "Angka 1 (satu) dalam bahasa Jepang disebut...", a: ["Ni", "San", "Ichi", "Yon"], c: 2 },
+                { q: "Karakter 'n' tunggal dalam Hiragana adalah...", a: ["ん", "め", "ぬ", "ね"], c: 0 },
+                { q: "Apa arti dari 'Sayonara'?", a: ["Selamat Datang", "Sampai Jumpa", "Selamat Malam", "Apa Kabar"], c: 1 },
+                { q: "Karakter Hiragana 'mo' adalah...", a: ["ま", "み", "む", "も"], c: 3 },
+                { q: "Apa bunyi dari karakter 'か'?", a: ["Ka", "Ki", "Ku", "Ke"], c: 0 }
+            ],
+            sedang: [
+                { q: "Partikel yang digunakan untuk menunjukkan topik utama kalimat adalah...", a: ["o (を)", "ni (に)", "wa (は)", "de (で)"], c: 2 },
+                { q: "Apa arti kata kerja 'Tabemasu'?", a: ["Minum", "Tidur", "Makan", "Pergi"], c: 2 },
+                { q: "Bahasa Jepang dari 'Sekolah' adalah...", a: ["Gakkou", "Byouin", "Ginkou", "Eki"], c: 0 },
+                { q: "Partikel untuk menunjukkan tempat tujuan (ke) adalah...", a: ["e (へ) / ni (に)", "de (で)", "o (を)", "no (の)"], c: 0 },
+                { q: "Apa arti kata 'Sensei'?", a: ["Murid", "Guru", "Dokter", "Polisi"], c: 1 },
+                { q: "Bagaimana menyebut 'Jam 3' (San-ji)?", a: ["さじ", "よじ", "さんじ", "にじ"], c: 2 },
+                { q: "Kata ganti orang pertama 'Saya' (paling umum/formal) adalah...", a: ["Anata", "Watashi", "Boku", "Kare"], c: 1 },
+                { q: "Apa arti kata 'Mizu'?", a: ["Nasi", "Teh", "Air", "Susu"], c: 2 },
+                { q: "Partikel 'no (の)' umumnya digunakan untuk menyatakan...", a: ["Kepemilikan / Hubungan", "Objek penderita", "Tempat kejadian", "Waktu"], c: 0 },
+                { q: "Apa arti kata 'Kyou'?", a: ["Besok", "Kemarin", "Hari ini", "Lusa"], c: 2 }
+            ],
+            sulit: [
+                { q: "Apa arti dari Kanji '水'?", a: ["Api", "Tanah", "Air", "Kayu"], c: 2 },
+                { q: "Bentuk lampau formal (~masita) dari 'Ikimasu' (Pergi) adalah...", a: ["Ikimashita", "Ikimashou", "Ikimasen", "Ikunai"], c: 0 },
+                { q: "Apa arti Kanji '人'?", a: ["Besar", "Orang", "Masuk", "Hari"], c: 1 },
+                { q: "Perubahan kata kerja bentuk sedang melakukan (~ing) menggunakan akhiran...", a: ["~te imasu", "~masu", "~nai", "~ta"], c: 0 },
+                { q: "Kanji '山' (Gunung) dibaca...", a: ["Kawa", "Yama", "Umi", "Sora"], c: 1 },
+                { q: "Apa lawan kata (antonim) dari 'Takai' (Mahal/Tinggi)?", a: ["Hikui (Rendah)", "Yasui (Murah)", "Oishii", "Muzukashii"], c: 1 },
+                { q: "Arti kalimat 'Kinou wa ame ga furimashita'?", a: ["Hari ini hujan", "Besok akan hujan", "Kemarin telah hujan", "Tidak hujan"], c: 2 },
+                { q: "Bentuk negatif formal (~masen) dari 'Tabemasu' adalah...", a: ["Tabemashita", "Tabemasen", "Tabenai", "Tabetai"], c: 1 },
+                { q: "Kanji '日' berarti...", a: ["Bulan", "Bintang", "Matahari / Hari", "Pohon"], c: 2 },
+                { q: "Apa arti ungkapan 'Wakarimasen'?", a: ["Sudah paham", "Tidak mengerti", "Bisa", "Mau"], c: 1 }
+            ],
+            sangat sulit: [
+                { q: "Apa arti dari Kanji '愛'?", a: ["Cinta", "Kebencian", "Kekuatan", "Kebahagiaan"], c: 0 },
+                { q: "Bentuk potensial dari 'Kiku' (Mendengar) adalah...", a: ["Kikemasu", "Kikimasu", "Kikemashou", "Kikenai"], c: 0 },
+                { q: "Apa arti Kanji '夢'?", a: ["Mimpi", "Nyata", "Masa Lalu", "Masa Depan"], c: 0 },
+                { q: "Perubahan kata kerja bentuk keinginan menggunakan akhiran...", a: ["~tai", "~masu", "~te imasu", "~ta"], c: 0 },
+                { q: "Kanji '空' (Langit) dibaca...", a: ["Sora", "Umi", "Yama", "Kawa"], c: 0 },
+                { q: "Apa lawan kata (antonim) dari 'Oishii' (Enak)?", a: ["Mazui (Tidak Enak)", "Amai (Manis)", "Karai (Pedas)", "Shoppai (Asin)"], c: 0 },
+                { q: "Arti kalimat 'Ashita wa hare deshou'?", a: ["Hari ini cerah", "Besok mungkin cerah", "Kemarin cerah", "Tidak cerah"], c: 1 },
+                { q: "Bentuk negatif formal (~masen) dari 'Shimasu' adalah...", a: ["Shimasen", "Shimasu", "Shinai", "Shitai"], c: 0 },
+                { q: "Kanji '力' berarti...", a: ["Cinta", "Kekuatan / Tenaga", "Waktu", "Orang"], c: 1 },
+                { q: "Apa arti ungkapan 'Ganbatte kudasai'?", a: ["Selamat tinggal", "Semangat belajar!", "Terima kasih banyak!", "Maafkan saya"], c: 1 }
+            ]
+        
+        };
+
+        let currentLevel = "";
+        let currentQuestionIdx = 0;
+        let score = 0;
+        let isAnswering = false;
+
+        function startQuiz(level) {
+            currentLevel = level;
+            currentQuestionIdx = 0;
+            score = 0;
+            document.getElementById('selection-screen').classList.add('hidden');
+            document.getElementById('quiz-box').style.display = 'block';
+            document.getElementById('quiz-content').classList.remove('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            isAnswering = false;
+            const data = quizData[currentLevel][currentQuestionIdx];
+            document.getElementById('progress').innerText = `SOAL ${currentQuestionIdx + 1} / 10`;
+            document.getElementById('question-text').innerText = data.q;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = "";
+            
+            data.a.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIdx, clickedBtn) {
+            if (isAnswering) return; 
+            isAnswering = true;
+
+            const correctIdx = quizData[currentLevel][currentQuestionIdx].c;
+            const allButtons = document.querySelectorAll('.option-btn');
+
+            if (selectedIdx === correctIdx) {
+                clickedBtn.style.backgroundColor = "#2ecc71"; // Hijau cerah
+                clickedBtn.style.color = "white";
+                clickedBtn.style.borderColor = "#2ecc71";
+                score++;
+            } else {
+                clickedBtn.style.backgroundColor = "#e74c3c"; // Merah cerah
+                clickedBtn.style.color = "white";
+                clickedBtn.style.borderColor = "#e74c3c";
+                
+                // Tunjukkan jawaban yang benar tanpa animasi
+                allButtons[correctIdx].style.backgroundColor = "#2ecc71";
+                allButtons[correctIdx].style.color = "white";
+                allButtons[correctIdx].style.borderColor = "#2ecc71";
+                allButtons[correctIdx].style.transform = "scale(1.03)";
+            }
+
+            // Tunggu 1.2 detik sebelum pindah soal
+            setTimeout(() => {
+                currentQuestionIdx++;
+                if (currentQuestionIdx < 10) {
+                    showQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1200);
+        }
+
+        function showResult() {
+            document.getElementById('quiz-content').classList.add('hidden');
+            const resultScreen = document.getElementById('result-screen');
+            resultScreen.classList.remove('hidden');
+            
+            document.getElementById('final-score').innerText = score;
+            
+            const statusText = document.getElementById('score-status');
+            const commentText = document.getElementById('score-comment');
+            
+            if (score === 10) {
+                statusText.innerText = "Sempurna! (Subarashii!) 🌸";
+                statusText.style.color = "#27ae60";
+                commentText.innerText = "Luar biasa! Kamu sudah menguasai level ini dengan sempurna. Siap untuk tantangan berikutnya?";
+            } else if (score >= 7) {
+                statusText.innerText = "Bagus Sekali! (Yoku Dekimashita!) ✨";
+                statusText.style.color = "#2980b9";
+                commentText.innerText = "Kerja bagus! Sedikit lagi latihan untuk memperbaiki kesalahan kecil, dan kamu akan meraih nilai sempurna.";
+            } else if (score >= 5) {
+                statusText.innerText = "Cukup Bagus! (Mazu-mazu) 👍";
+                statusText.style.color = "#f39c12";
+                commentText.innerText = "Kamu sudah paham dasarnya. Disarankan untuk mengulas kembali materi yang salah sebelum lanjut.";
+            } else {
+                statusText.innerText = "Semangat Belajar! (Ganbatte!) 💪";
+                statusText.style.color = "#e74c3c";
+                commentText.innerText = "Jangan menyerah! Coba ulangi materi pelajaran dan kerjakan kuisnya lagi. Kegagalan adalah tangga menuju kesuksesan.";
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Lengkap | Nihongo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { 
+            --main: #bc002d; 
+            --dark: #1a1a1a; 
+            --bg-overlay: rgba(248, 249, 250, 0.9); /* Overlay agar teks tetap terbaca */
+            --white: #ffffff; 
+        }
+
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', sans-serif; 
+            /* Menambahkan Background Osaka */
+            background-image: url('https://images.unsplash.com/photo-1590559899731-a382839e5549?q=80&w=1920&auto=format&fit=crop');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            color: var(--dark); 
+            line-height: 1.6; 
+        }
+        
+        /* Navbar */
+        nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 20px 8%; 
+            background: rgba(255, 255, 255, 0.95); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            backdrop-filter: blur(5px);
+        }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--main); }
+        nav ul { list-style: none; display: flex; padding: 0; }
+        nav ul li { margin-left: 30px; }
+        nav ul li a { text-decoration: none; color: var(--dark); font-weight: 600; transition: 0.3s; }
+        nav ul li a:hover, .active { color: var(--main); }
+
+        .container { 
+            padding: 40px 8%; 
+            background: var(--bg-overlay); /* Memberikan warna latar belakang transparan pada konten */
+            min-height: 100vh;
+        }
+
+        .section-title { text-align: center; margin-bottom: 40px; }
+        .section-title h1 { color: var(--main); font-size: 2.5rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        
+        /* Materi Cards */
+        .materi-wrapper { max-width: 900px; margin: 0 auto; }
+        .materi-card { 
+            background: var(--white); 
+            padding: 30px; 
+            border-radius: 20px; 
+            margin-bottom: 30px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        }
+        .materi-card h2 { 
+            color: var(--main); 
+            border-bottom: 2px solid #f0f0f0; 
+            padding-bottom: 10px; 
+            margin-bottom: 20px; 
+            display: flex; 
+            align-items: center; 
+        }
+        .materi-card h2 i { margin-right: 15px; }
+
+        /* Tables for Data */
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; background: white; }
+        table th, table td { border: 1px solid #eee; padding: 12px; text-align: center; }
+        table th { background: var(--main); color: white; }
+        
+        .badge { background: #eee; padding: 3px 10px; border-radius: 5px; font-size: 0.85rem; font-weight: bold; }
+        .example-box { background: #fff5f6; padding: 15px; border-left: 4px solid var(--main); border-radius: 5px; margin-top: 10px; }
+        
+        footer { 
+            background: rgba(255, 255, 255, 0.9); 
+            text-align: center; 
+            padding: 20px; 
+            color: #666; 
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">NIHONGO.</div>
+        <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="materi.html" class="active">Materi</a></li>
+            <li><a href="kuis.html">Kuis</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="section-title">
+            <h1>Panduan Belajar Bahasa Jepang</h1>
+            <p>Pelajari materi di bawah ini sebelum mencoba kuis!</p>
+        </div>
+
+        <div class="materi-wrapper">
+            <!-- Level Mudah -->
+            <div class="materi-card">
+                <h2><i class="fas fa-leaf"></i> Dasar: Hiragana & Aisatsu</h2>
+                <p>Hiragana adalah alfabet dasar Jepang. Ada 46 karakter utama. Berikut adalah vokal dasar dan salam sapaan (Aisatsu):</p>
+                <table>
+                    <tr><th>Hiragana</th><td>あ (a)</td><td>い (i)</td><td>う (u)</td><td>え (e)</td><td>お (o)</td></tr>
+                    <tr><th>Hiragana</th><td>か (ka)</td><td>き (ki)</td><td>く (ku)</td><td>け (ke)</td><td>こ (ko)</td></tr>
+                </table>
+                <div class="example-box">
+                    <strong>Salam Sapaan Umum:</strong><br>
+                    • <b>Ohayou Gozaimasu:</b> Selamat Pagi<br>
+                    • <b>Konnichiwa:</b> Selamat Siang/Halo<br>
+                    • <b>Konbanwa:</b> Selamat Malam<br>
+                    • <b>Arigatou:</b> Terima Kasih
+                </div>
+            </div>
+
+            <!-- Level Sedang -->
+            <div class="materi-card">
+                <h2><i class="fas fa-bicycle"></i> Menengah: Partikel & Kosakata</h2>
+                <p>Untuk membentuk kalimat, kita membutuhkan partikel. Inilah yang paling sering keluar di kuis N5:</p>
+                <ul>
+                    <li><b>WA (は):</b> Penanda topik/subjek kalimat.</li>
+                    <li><b>NO (の):</b> Penanda kepemilikan (Contoh: Watashi no hon = Buku saya).</li>
+                    <li><b>E/NI (へ/に):</b> Menunjukkan arah atau tempat tujuan.</li>
+                    <li><b>O (を):</b> Penanda objek penderita.</li>
+                </ul>
+                <div class="example-box">
+                    <strong>Kosakata Tempat & Benda:</strong><br>
+                    • <b>Gakkou:</b> Sekolah | <b>Mizu:</b> Air<br>
+                    • <b>Sensei:</b> Guru | <b>Kyou:</b> Hari ini
+                </div>
+            </div>
+
+            <!-- Level Sulit -->
+            <div class="materi-card">
+                <h2><i class="fas fa-mountain"></i> Lanjut: Kanji & Kata Kerja</h2>
+                <p>Di level ini, kamu mulai mempelajari perubahan bentuk kata kerja dan simbol Kanji.</p>
+                <table>
+                    <tr><th>Kanji</th><th>Arti</th><th>Bacaan</th></tr>
+                    <tr><td>水</td><td>Air</td><td>Mizu</td></tr>
+                    <tr><td>人</td><td>Orang</td><td>Hito</td></tr>
+                    <tr><td>山</td><td>Gunung</td><td>Yama</td></tr>
+                    <tr><td>日</td><td>Matahari/Hari</td><td>Hi / Nichi</td></tr>
+                </table>
+                <div class="example-box">
+                    <strong>Perubahan Kata Kerja (Tabemasu = Makan):</strong><br>
+                    • <b>Bentuk Sopan (~Masu):</b> Tabemasu<br>
+                    • <b>Bentuk Negatif (~Masen):</b> Tabemasen (Tidak makan)<br>
+                    • <b>Bentuk Lampau (~Mashita):</b> Tabemashita (Sudah makan)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Nihongo Journey - Selamat Belajar dari Osaka!
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nihongo | Beranda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --main: #3304ec; --dark: #1a1a1a; --light: #fdfdfd; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--light); color: var(--dark); }
+        
+        /* Navbar */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; background: white; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--main); letter-spacing: 1px; }
+        nav ul { list-style: none; display: flex; }
+        nav ul li { margin-left: 30px; }
+        nav ul li a { text-decoration: none; color: var(--dark); font-weight: 600; transition: 0.3s; }
+        nav ul li a:hover, .active { color: var(--main); }
+
+        /* Hero Section */
+        .hero { height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; background: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1350&q=80'); background-size: cover; padding: 0 20px; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; }
+        .hero p { font-size: 1.2rem; color: #555; max-width: 600px; margin: 0 auto 30px; }
+        .btn { padding: 15px 35px; background: var(--main); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 15px rgba(188, 0, 45, 0.3); }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(188, 0, 45, 0.4); }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">NIHONGO.</div>
+        <ul>
+            <li><a href="index.html" class="active">Beranda</a></li>
+            <li><a href="materi.html">Materi</a></li>
+            <li><a href="kuis.html">Kuis</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+        </ul>
+    </nav>
+    <section class="hero">
+        <div>
+            <h1>Kuasai Bahasa Jepang <br> dari Mana Saja.</h1>
+            <p>Belajar Hiragana, Katakana, dan Kanji dengan metode yang interaktif dan menyenangkan.</p>
+            <p>Jumlah Pengunjung: <span id="visitor-count">0</span></p>
+            <a href="materi.html" class="btn">Mulai Petualangan</a>
+        </div>
+    </section>
+    <script>
+        // Counter pengunjung menggunakan localStorage
+        let visitorCount = localStorage.getItem('visitorCount') || 0;
+        visitorCount = parseInt(visitorCount) + 1;
+        localStorage.setItem('visitorCount', visitorCount);
+        document.getElementById('visitor-count').textContent = visitorCount;
+    </script>
+</body>
+</html>
